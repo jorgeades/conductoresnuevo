@@ -1,0 +1,18 @@
+﻿@model CochesYConductores.Models.Conductor
+@{
+    ViewBag.Title = "DetallesConductor";
+}
+
+<h2>DetallesConductor</h2>
+
+Nonmbre del conductor:
+@Model.nombre
+
+@Model.apellidos
+<br />
+@foreach (var lic in Model.Licencias)
+{
+    <br />
+    @lic.nombre
+    <br />
+}

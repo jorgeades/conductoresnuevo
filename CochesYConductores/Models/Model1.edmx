@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VehiculosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Conductor">
+          <Key>
+            <PropertyRef Name="idConductor" />
+          </Key>
+          <Property Name="idConductor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellidos" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="idVehiculo" Type="int" />
+        </EntityType>
+        <EntityType Name="ConductorLicencia">
+          <Key>
+            <PropertyRef Name="idConductor" />
+            <PropertyRef Name="idLicencia" />
+          </Key>
+          <Property Name="idConductor" Type="int" Nullable="false" />
+          <Property Name="idLicencia" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Licencias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="matricula" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="marca" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="modelo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Conductor_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="0..1" />
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Conductor">
+              <PropertyRef Name="idVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConductorLicencia_Conductor">
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="1" />
+          <End Role="ConductorLicencia" Type="Self.ConductorLicencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conductor">
+              <PropertyRef Name="idConductor" />
+            </Principal>
+            <Dependent Role="ConductorLicencia">
+              <PropertyRef Name="idConductor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ConductorLicencia_Licencias">
+          <End Role="Licencias" Type="Self.Licencias" Multiplicity="1" />
+          <End Role="ConductorLicencia" Type="Self.ConductorLicencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Licencias">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ConductorLicencia">
+              <PropertyRef Name="idLicencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VehiculosModelStoreContainer">
+          <EntitySet Name="Conductor" EntityType="Self.Conductor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConductorLicencia" EntityType="Self.ConductorLicencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Licencias" EntityType="Self.Licencias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Conductor_Vehiculo" Association="Self.FK_Conductor_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Conductor" EntitySet="Conductor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConductorLicencia_Conductor" Association="Self.FK_ConductorLicencia_Conductor">
+            <End Role="Conductor" EntitySet="Conductor" />
+            <End Role="ConductorLicencia" EntitySet="ConductorLicencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ConductorLicencia_Licencias" Association="Self.FK_ConductorLicencia_Licencias">
+            <End Role="Licencias" EntitySet="Licencias" />
+            <End Role="ConductorLicencia" EntitySet="ConductorLicencia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VehiculosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Conductor">
+          <Key>
+            <PropertyRef Name="idConductor" />
+          </Key>
+          <Property Name="idConductor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idVehiculo" Type="Int32" />
+          <NavigationProperty Name="Vehiculo" Relationship="Self.FK_Conductor_Vehiculo" FromRole="Conductor" ToRole="Vehiculo" />
+          <NavigationProperty Name="Licencias" Relationship="Self.ConductorLicencia" FromRole="Conductor" ToRole="Licencias" />
+        </EntityType>
+        <EntityType Name="Licencias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Conductor" Relationship="Self.ConductorLicencia" FromRole="Licencias" ToRole="Conductor" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="matricula" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="marca" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="modelo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Conductor" Relationship="Self.FK_Conductor_Vehiculo" FromRole="Vehiculo" ToRole="Conductor" />
+        </EntityType>
+        <Association Name="FK_Conductor_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="0..1" />
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Conductor">
+              <PropertyRef Name="idVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ConductorLicencia">
+          <End Role="Conductor" Type="Self.Conductor" Multiplicity="*" />
+          <End Role="Licencias" Type="Self.Licencias" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="VehiculosEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Conductor" EntityType="Self.Conductor" />
+          <EntitySet Name="Licencias" EntityType="Self.Licencias" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" />
+          <AssociationSet Name="FK_Conductor_Vehiculo" Association="Self.FK_Conductor_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Conductor" EntitySet="Conductor" />
+          </AssociationSet>
+          <AssociationSet Name="ConductorLicencia" Association="Self.ConductorLicencia">
+            <End Role="Conductor" EntitySet="Conductor" />
+            <End Role="Licencias" EntitySet="Licencias" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VehiculosModelStoreContainer" CdmEntityContainer="VehiculosEntities1">
+          <EntitySetMapping Name="Conductor">
+            <EntityTypeMapping TypeName="VehiculosModel.Conductor">
+              <MappingFragment StoreEntitySet="Conductor">
+                <ScalarProperty Name="idConductor" ColumnName="idConductor" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="idVehiculo" ColumnName="idVehiculo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Licencias">
+            <EntityTypeMapping TypeName="VehiculosModel.Licencias">
+              <MappingFragment StoreEntitySet="Licencias">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculo">
+            <EntityTypeMapping TypeName="VehiculosModel.Vehiculo">
+              <MappingFragment StoreEntitySet="Vehiculo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="matricula" ColumnName="matricula" />
+                <ScalarProperty Name="marca" ColumnName="marca" />
+                <ScalarProperty Name="modelo" ColumnName="modelo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ConductorLicencia" TypeName="VehiculosModel.ConductorLicencia" StoreEntitySet="ConductorLicencia">
+            <EndProperty Name="Conductor">
+              <ScalarProperty Name="idConductor" ColumnName="idConductor" />
+            </EndProperty>
+            <EndProperty Name="Licencias">
+              <ScalarProperty Name="id" ColumnName="idLicencia" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
